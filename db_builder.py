@@ -26,6 +26,7 @@ c.execute(q)
 peeps = csv.DictReader(open("peeps.csv"))
 courses = csv.DictReader(open("courses.csv"))
 
+
 #query statement for each csv file
 peepsQ = "CREATE TABLE students (name TEXT, age INTEGER, id INTEGER)"
 coursesQ = "CREATE TABLE courses (code TEXT, mark INTEGER, id INTEGER)"
@@ -36,14 +37,25 @@ c.execute(coursesQ)
 
 #populate each table
 for data in peeps:
-    c.execute("INSERT INTO students VALUES (data["name"], data["age"], data["id"])")
+    c.execute("INSERT INTO students VALUES ('"+data["name"]+"',"+data["age"]+","+data["id"]+")")
 
 for data in courses:
-    c.execute("INSERT INTO courses VALUES (data["code"], data["mark"], data["id"])")
+    c.execute("INSERT INTO courses VALUES ('"+data["code"]+"',"+data["mark"]+","+data["id"]+")")
 
+#Testing out tables
+print "Content for table students, data from peeps.csv: \n"
+for row in c.execute('SELECT * FROM students'):
+    print row
+print "\n"
+
+print "Content for table courses, data from sources.csv: \n"
+for row in c.execute('SELECT * FROM courses'):
+    print row
+print "\n"
 
 #==========================================================
 db.commit() #save changes
 db.close()  #close database
+
 
 
