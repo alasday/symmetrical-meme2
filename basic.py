@@ -54,11 +54,37 @@ for data in peeps:
 for data in courses:
     c.execute(insertStmt(data, "courses", "code", "mark", "id"))
 
-'''
-for item in c.execute("""
-               SELECT age,id 
-               FROM students
-               WHERE name='
-               """+name+"'"):
-    print item
-'''
+
+
+#create a table for chosen student
+c.execute("CREATE TABLE profile(code TEXT, grade REAL)")
+
+#write select statement to obtain the student's courses and grades
+getID = "SELECT id FROM students WHERE name='" + name + "'"
+getGrades = "SELECT code, mark FROM courses WHERE id=(" + getID + ")"
+
+#add records to table profile
+c.execute("INSERT INTO profile " + getGrades)
+
+#calculate and insert average into table profile
+total = 0
+courseNum = 0
+for item in c.execute("SELECT grade FROM profile"):
+    total += item[0]
+    courseNum += 1
+c.execute("INSERT INTO profile VALUES('average', " + str(total/courseNum) + ")")
+
+
+c.execute("SELECT * FROM profile")
+content = c.fetchall()
+length = len(content)
+print "Report for " + name + ": \n"
+for pos in range(length):
+    print content[pos][0] + "  " + str(content[pos][1]) + "\n"
+
+    
+
+#==========================
+db.commit()
+db.close()
+
