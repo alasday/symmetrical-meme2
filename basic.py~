@@ -1,0 +1,10 @@
+import csv
+import sqlite3
+import sys
+
+f="avrgs.db"
+
+db = sqlite3.connect(f)
+c = db.cursor()
+
+name = sys.argv[0]
